@@ -1,3 +1,12 @@
+/******************************************************************************
+ *________________________UNIVERSIDAD_DE_COSTA_RICA____________________________
+ *__________________IE0624_Laboratorio_de_microcontroladores___________________
+ *__________________________Junior_Ruiz_Sánchez________________________________
+ * Laboratorio 1:
+ *     Display que muestra valor aleatorio entre [00, 99]
+ *     tiene 10 intentos, no se repiten números y al terminar los intentos
+ *     los valores almacenados se reinician, mostrando el valor 99 _3 veces.
+ *****************************************************************************/
 #include <pic14/pic12f683.h>
 
 #define TIEMPO 500
@@ -49,7 +58,7 @@ void main(void)
       for (int i = 0; i < 10; i++)     /* Ciclo for para revisar valores
                                           almacenados en array               */
       {
-        if (aleatorio == array[i])     /* Se verifica si el valor está contenido
+        if (aleatorio == array[i])    /* Se verifica si el valor está contenido
                                           en array*/
         {
           no_repetido = 0;             // En caso de estar contenido, el valor
@@ -94,27 +103,27 @@ void delay(unsigned int tiempo)
 
 void display(unsigned int valor)
 {
-  unsigned short int semiCiclo = 16; // Se necesitan enviar 8 bits
-  unsigned short int bit_enviar = 0; // control de bit a enviar
-  GP0 = 0;                           // se inicia el tren de pulsos en cero
-  int decenas = valor / 10;          // obteniendo valor decena para BCD
-  int unidades = valor % 10;         // obteniendo valor unidad para BCD
-  decenas = (decenas << 4);          // Desplanzando para obtener 4 bits en 0
-  valor = decenas | unidades;        // obteniendo valor en BCD
+  unsigned short int semiCiclo = 16;   // Se necesitan enviar 8 bits
+  unsigned short int bit_enviar = 0;   // control de bit a enviar
+  GP0 = 0;                             // se inicia el tren de pulsos en cero
+  int decenas = valor / 10;            // obteniendo valor decena para BCD
+  int unidades = valor % 10;           // obteniendo valor unidad para BCD
+  decenas = (decenas << 4);            // Desplanzando para obtener 4 bits en 0
+  valor = decenas | unidades;          // obteniendo valor en BCD
   
-  while (semiCiclo > 0)              // loop de control para tren de pulsos     
+  while (semiCiclo > 0)                  // loop de control para tren de pulsos     
   {
-    if (GP0 == 0)                    // Si el nivel del tren es low
+    if (GP0 == 0)                        // Si el nivel del tren es low
     {
-      GP1 = ((valor >> bit_enviar) // Se envia el digito más significativo
-             & 0x01);              // con la ayuda de una mascara AND
-      bit_enviar++;                // siguiente bit a enviar
-      delay(1);                    // delay de seguridad para que
-                                   // no se envie el digito antes de cambiarlo
+      GP1 = ((valor >> bit_enviar)  // Se envia el digito más significativo
+             & 0x01);               // con la ayuda de una mascara AND
+      bit_enviar++;                 // siguiente bit a enviar
+      delay(1);                     // delay de seguridad para que
+                                    // no se envie el digito antes de cambiarlo
     }
-    GP0 = ~GP0;                    // se cambia el nivel del tren de pulsos
-    semiCiclo--;                   // se resta 1 a la variable de control
-    delay(1);                      // delay para mantener valor 
+    GP0 = ~GP0;                     // se cambia el nivel del tren de pulsos
+    semiCiclo--;                    // se resta 1 a la variable de control
+    delay(1);                       // delay para mantener valor 
   }
 }
 
