@@ -12,6 +12,10 @@ all:
 #	${LD} -o ${TARGET}.elf ${TARGET}.o
 #	${OBJCOPY} -j .text -j .data -O ihex ${TARGET}.o ${TARGET}.hex
 #	${SIZE} -C --mcu=${MCU} ${TARGET}.elf
+	#
+	# --------MOSTRANDO MEMORIA CONSUMIDA APROXIMADA
+	tail -n 4 ${TARGET}.asm
+	simulide ${TARGET}.simu
 
 clean:
 	rm -f *.c~ *.h~ *.o *.elf *.hex *.asm *.cod *.lst
