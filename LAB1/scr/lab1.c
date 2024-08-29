@@ -17,13 +17,18 @@ void main(void)
 {
     ANSEL = 0x00;         // Configurando pines como digitales
     CMCON = 0x07;         // Desactivando comparadores
-    TRISIO = 0b00000000;  // 
-    GPIO &= (0b00000000); // Inicializa todos los pines en bajo 
+    TRISIO = 0b00000100;  // 
+    GPIO &= (0b00000100); // Inicializa todos los pines en bajo 
+    
     unsigned int aleatorio = 99;
+    
     while (1)
     {   
+        if (GP2){
         display(aleatorio);
-        delay(500);           // quitar delay para ser aleatorio
+        delay(10);           // quitar delay para ser aleatorio
+        }
+
         if (aleatorio == 0){
           aleatorio = 100;
         }
