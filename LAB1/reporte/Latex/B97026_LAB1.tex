@@ -1,0 +1,115 @@
+ 
+% =============================================
+% ================= PREÁMBULO =================
+% =============================================
+
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}        % Para Tildes
+\usepackage[spanish,es-tabla]{babel}
+\usepackage{graphicx}
+\usepackage{cite}
+\usepackage{minted}
+
+
+
+\usepackage{multicol,multirow}
+\usepackage{amsmath,mathtools}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{adjustbox}
+\usepackage[europeanresistors]{circuitikz}
+\usepackage{siunitx,enumitem}
+\usepackage{pdfpages}       % Para importar páginas de un pdf 
+\usepackage{booktabs}
+\usepackage{physics}
+\usepackage[bookmarks=true,colorlinks=true,linkcolor=black,citecolor=black,menucolor=black,urlcolor=black]{hyperref} 
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry} 
+\usepackage{float}      % Para ubicar las tablas y figuras justo después del texto
+\usepackage{pdfpages}
+\usepackage{svg}
+\usepackage[numbered,framed]{matlab-prettifier}
+\usepackage{filecontents}
+\usepackage{dirtytalk}
+\usepackage{cancel}
+\usepackage{colortbl}
+\usepackage{karnaugh-map}
+
+
+
+\newcommand\Ccancel[2][black]{\renewcommand\CancelColor{\color{#1}}\cancel{#2}}
+
+\usepackage{tikz}
+
+\newcommand{\lapt}{
+  \begin{tikzpicture}[baseline=-0.5ex]
+    \draw (0,0) circle [radius=0.5ex];
+    \draw (0.5ex,0) -- (3.5ex,0); 
+    \draw[fill] (4ex,0) circle [radius=0.5ex];
+  \end{tikzpicture} 
+  \hspace{0.2cm}
+}
+
+\newcommand{\ilapt}{
+  \begin{tikzpicture}[baseline=-0.5ex]
+    \draw[fill] (0,0) circle [radius=0.5ex];
+    \draw (0.5ex,0) -- (3.5ex,0);
+    \draw (4ex,0) circle [radius=0.5ex];
+  \end{tikzpicture}
+   \hspace{0.2cm}
+}
+
+
+
+
+%acá se introduce el codigo de matlab
+
+
+
+
+% =============================================
+% ================= DOCUMENTO =================
+% =============================================
+
+\begin{document} 
+
+\begin{table}[H]
+    \centering
+    \begin{tabular} {|m{0.9\textwidth}|m{0.1\textwidth}|}
+      \cline{1-2}
+        % Celda 1x
+        \centering
+        \vspace{0.2cm}
+        UNIVERSIDAD DE COSTA RICA \\ \vspace{0.2cm}
+         ESCUELA DE INGENIERÍA ELÉCTRICA \\ \vspace{0.2cm}
+         IE-0624 $-$ Laboratorio de Microcontroladores \vspace{0.2cm}
+        &
+        % Celda 1x2
+        \includegraphics[width=\linewidth]{IMG/Imagen1.png}\\
+      \cline{1-2}
+    \end{tabular}
+    
+    \begin{tabular} {|m{0.4\textwidth}|m{0.6\textwidth}|}
+        % Celda 2x1
+        \multicolumn{1}{|p{0.4\textwidth}|}{
+        \centering \footnotesize{PREPARADO POR\@: \\ \vspace{0.25cm}
+        Ruiz Sánchez Junior Alfonso $-$ B97026}
+        }
+        &
+        % Celda 2x2
+        \multicolumn{1}{p{0.6\textwidth}|}{
+        \raggedright\footnotesize{ 
+        Laboratorio 01 \hfill Fecha de entrega: 28 $-$ 08 $-$ 2024. \\ \vspace{0.1cm}
+        Profesor: Marco Villalta Fallas
+        
+        \hfill}
+        } \\
+        
+        \cline{1-2}
+
+    \end{tabular}
+\end{table}
+
+
+
+\end{document}

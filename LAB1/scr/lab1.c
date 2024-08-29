@@ -9,7 +9,7 @@
  *****************************************************************************/
 #include <pic14/pic12f683.h>
 
-#define TIEMPO 500
+#define TIEMPO 500        // Tiempo para mantener el valor obtenido en pantalla
 
 int __at 0x2007 __config =
     (_CP_OFF & _CPD_OFF      // Desactiva protecciones de codigo y de EEPROM
@@ -18,6 +18,7 @@ int __at 0x2007 __config =
      & _WDT_OFF              // Desactiva wathdog timer
      & _INTRC_OSC_NOCLKOUT); // oscilador interno, sin salida de clock
 
+// PROTOTIPOS DE FUNCIONES
 void delay(unsigned int tiempo);
 /*  Esta función itera n*m veces donde n es el valor ingresado en la función
     y m corresponde a un valor cercano a 1000. En este caso 1275. 
@@ -30,7 +31,10 @@ void display(unsigned int valor);
     Para ello el pin GP0 es pin que envia el tren de pulsos
     y el pin GP1 es el pin que envia los datos */
 void parpadear(void);
+/*  Esta función muestra el número 99 y F0, para simular un parpadeo
+    Se toma la F como valor que indica que esto es un reinicio               */
 
+// CODIGO PRINCIPAL
 void main(void)
 {
   ANSEL = 0x00;         // Configurando pines como digitales
@@ -38,17 +42,19 @@ void main(void)
   TRISIO = 0b00000100;  //  GP2 entrada, los demás son entradas
   GPIO &= (0b00000100); // Inicializa todos los pines de salida en bajo
 
+//............................................................................. 
   unsigned int aleatorio = 99;    // Valor inicial para números aleatorios
   unsigned int intentos = 10;     // cantidad de intentos
   int array[10];                  // Arreglo para guardar números y no repetir
 
+//-----------------------------------------------------------------------------
   reinicio:                       // Etiqueta para usar goto
   parpadear();
   for (int i = 0; i < 10; i++)    // Ciclo for para formatear valores del array
   {
     array[i] = 150; // asignando un valor que no está en [00, 99]
   }
-
+//*****************************************************************************
   while (1)     // MAIN LOOP
   {
     if (GP2)    // EJECUTAR SI SE PRESIONA EL BOTÓN
@@ -90,6 +96,8 @@ void main(void)
     display(aleatorio);           // display para mostrar que está iterando
   }
 }
+
+// FUNCIONES
 
 void delay(unsigned int tiempo)
 {

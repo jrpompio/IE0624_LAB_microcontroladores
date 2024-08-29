@@ -6,6 +6,10 @@
 *.lo
 *.o
 *.obj
+*.cod
+*.lst
+*.hex
+
 
 # Precompiled Headers
 *.gch
@@ -30,3 +34,6 @@
 *.exe
 *.out
 *.app
+
+# archivo generado de ensamblador
+*.asm
