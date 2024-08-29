@@ -15,7 +15,7 @@ all:
 	#
 	# --------MOSTRANDO MEMORIA CONSUMIDA APROXIMADA
 	tail -n 4 ${TARGET}.asm
-	simulide ${TARGET}.simu
+#	simulide ${TARGET}.simu
 
 clean:
 	rm -f *.c~ *.h~ *.o *.elf *.hex *.asm *.cod *.lst
