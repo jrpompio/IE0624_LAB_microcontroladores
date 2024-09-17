@@ -255,7 +255,7 @@ int main() {
         leer_combinacion(combinacion_usuario, longitud_combinacion);
         
         if (comparar_combinaciones(combinacion_generada, combinacion_usuario, longitud_combinacion)) {
-            printf("¡Correcto! Has acertado la combinación haz ganado putita.\n");
+            printf("¡Correcto! Has acertado la combinación.\n");
             estado = estado + 1;
         } else {
             printf("Combinación incorrecta. Has perdido.\n");
