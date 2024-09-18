@@ -34,6 +34,7 @@
 *.exe
 *.out
 *.app
+*.bin
 
 # archivo generado de ensamblador
 *.asm
