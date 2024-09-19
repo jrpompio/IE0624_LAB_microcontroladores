@@ -14,6 +14,8 @@
 #define VERDE 4
 #define AZUL 8
 
+void delayVar(uint16_t delay);
+
 int main(){    
 /******************************************************************************
  * Inicio del codigo
@@ -24,9 +26,9 @@ int main(){
   DDRD = 0x00; // Configura todos los pines del puerto D como entrada
   
   int state = standby;                    // Variable de estado
-  int counterSecuence = 4;                // Variable para controlar el tamaño de la secuencia
-  int initSec = 0;
-  int ledTime = 20000;
+  int counterSecuence;                // Variable para controlar el tamaño de la secuencia
+  int initSec;
+  int ledTime;
   int secuenceLed[13] = {0};              // Array para guardar la secuencia
   int buttos[4] = {ROJO, AMARI, VERDE, AZUL};              // Numeros representativos de los botones
   int randNum; 
@@ -41,15 +43,16 @@ int main(){
 
   sei();
 
+  inicio:
+  counterSecuence = 4;
+  ledTime = 20000;
   while (1){
-    _delay_ms(5000);
+    _delay_ms(10000);
 
     bRed =    (PIND & (1 << PD0)); // Entrada PD0 como botón 0
     bGreen =  (PIND & (1 << PD1)); // Entrada PD1 como botón 1
     bYellow = (PIND & (1 << PD2)); // Entrada PD2 como botón 2
     bBlue =   (PIND & (1 << PD3)); // Entrada PD3 como botón 3
-
-    inicio:
     switch (state){
       case standby:
         PORTB = 0x0F;
@@ -82,46 +85,43 @@ int main(){
             {
                 randNum = buttos[TCNT0 % 4];
                   PORTB = 0x00;
-                _delay_ms(1000);
                 secuenceLed[i] = randNum;
 
                 if (randNum == ROJO){
                   PORTB |= (1 << PB0);
-                  _delay_ms(ledTime);
+                  delayVar(ledTime);
                   PORTB = 0x00;
-                  _delay_ms(ledTime);
+                  delayVar(ledTime);
                 } else if (randNum == AMARI){
                   PORTB |= (1 << PB2);
-                  _delay_ms(ledTime);
+                  delayVar(ledTime);
                   PORTB = 0x00;
-                  _delay_ms(ledTime);
+                  delayVar(ledTime);
                   } else if (randNum == VERDE){
                   PORTB |= (1 << PB1);
-                  _delay_ms(ledTime);
+                  delayVar(ledTime);
                   PORTB = 0x00;
-                  _delay_ms(ledTime);
+                  delayVar(ledTime);
                 } else if (randNum == AZUL){
                   PORTB |= (1 << PB3);
-                  _delay_ms(ledTime);
+                  delayVar(ledTime);
                   PORTB = 0x00;
-                  _delay_ms(ledTime);
+                  delayVar(ledTime);
                 }
             }
       break;
 
       case secuence:
-        state = user;
         _delay_ms(10000);
         for (int i = 0; i<= counterSecuence -1; i++){
+        state = user; 
           bPressed = 0;
 
-        switch (secuenceLed[i]) {
-        
-        case ROJO:
+        if (secuenceLed[i]==ROJO){
             while (!bPressed) {
                 if (PIND & (1 << PD0)) {
                      PORTB |= (1 << PB0);
-                  _delay_ms(ledTime);
+                  delayVar(ledTime);
                   PORTB = 0x00;
                   _delay_ms(100);
                   bPressed = 1;
@@ -129,16 +129,13 @@ int main(){
                 (PIND & (1 << PD2))||(PIND & (1 << PD3))){
                   state=standby;
                   goto inicio;
-                }
+                }}}
 
-            }
-            break;
-
-        case AMARI:
+         else if (secuenceLed[i]==AMARI){
             while (!bPressed) {
                 if (PIND & (1 << PD2)) {
                      PORTB |= (1 << PB2);
-                  _delay_ms(ledTime);
+                  delayVar(ledTime);
                   PORTB = 0x00;
                   _delay_ms(100);
                   bPressed = 1;
@@ -146,16 +143,13 @@ int main(){
                 (PIND & (1 << PD1))||(PIND & (1 << PD3))){
                   state=standby;
                   goto inicio;
-                }}
-            break;
+                }}}
 
-            
-
-        case VERDE:
+         else if (secuenceLed[i]==VERDE){
             while (!bPressed) {
                 if (PIND & (1 << PD1)) {
                      PORTB |= (1 << PB1);
-                  _delay_ms(ledTime);
+                  delayVar(ledTime);
                   PORTB = 0x00;
                   _delay_ms(100);
                   bPressed = 1;
@@ -163,15 +157,12 @@ int main(){
                 (PIND & (1 << PD2))||(PIND & (1 << PD3))){
                   state=standby;
                   goto inicio;
-                }
-            }
-            break;
-
-        case AZUL:
+                }}}
+         else if (secuenceLed[i]==AZUL){
             while (!bPressed) {
                 if (PIND & (1 << PD3)) {
                      PORTB |= (1 << PB3);
-                  _delay_ms(ledTime);
+                  delayVar(ledTime);
                   PORTB = 0x00;
                   _delay_ms(100);
                   bPressed = 1;
@@ -179,23 +170,24 @@ int main(){
                 (PIND & (1 << PD1))||(PIND & (1 << PD2))){
                   state=standby;
                   goto inicio;
-                }
-            }
-            break;
+                }}}
+        }
 
-        default:
-            break;
-        }
-        }
-        counterSecuence++;
-        ledTime = ledTime;
       break;
 
       case user:
         state = start;
+        counterSecuence++;
+        ledTime = ledTime - 2000;
       break;
       default:
       break;
     }
   }
+}
+
+void delayVar(uint16_t delay) {
+    while (delay--) {
+        _delay_ms(1); // Retarda 1 ms en cada iteración
+    }
 }

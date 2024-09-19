@@ -1,0 +1,42 @@
+simonCode.c: In function ‘main’:
+simonCode.c:30:7: warning: unused variable ‘ledReduce’ [-Wunused-variable]
+   int ledReduce = ledTime/10;
+       ^
+In file included from simonCode.c:2:0:
+/usr/lib/avr/include/util/delay.h:187:2: error: __builtin_avr_delay_cycles expects a compile time integer constant
+  __builtin_avr_delay_cycles(__ticks_dc);
+  ^
+/usr/lib/avr/include/util/delay.h:187:2: error: __builtin_avr_delay_cycles expects a compile time integer constant
+  __builtin_avr_delay_cycles(__ticks_dc);
+  ^
+/usr/lib/avr/include/util/delay.h:187:2: error: __builtin_avr_delay_cycles expects a compile time integer constant
+  __builtin_avr_delay_cycles(__ticks_dc);
+  ^
+/usr/lib/avr/include/util/delay.h:187:2: error: __builtin_avr_delay_cycles expects a compile time integer constant
+  __builtin_avr_delay_cycles(__ticks_dc);
+  ^
+/usr/lib/avr/include/util/delay.h:187:2: error: __builtin_avr_delay_cycles expects a compile time integer constant
+  __builtin_avr_delay_cycles(__ticks_dc);
+  ^
+/usr/lib/avr/include/util/delay.h:187:2: error: __builtin_avr_delay_cycles expects a compile time integer constant
+  __builtin_avr_delay_cycles(__ticks_dc);
+  ^
+/usr/lib/avr/include/util/delay.h:187:2: error: __builtin_avr_delay_cycles expects a compile time integer constant
+  __builtin_avr_delay_cycles(__ticks_dc);
+  ^
+/usr/lib/avr/include/util/delay.h:187:2: error: __builtin_avr_delay_cycles expects a compile time integer constant
+  __builtin_avr_delay_cycles(__ticks_dc);
+  ^
+/usr/lib/avr/include/util/delay.h:187:2: error: __builtin_avr_delay_cycles expects a compile time integer constant
+  __builtin_avr_delay_cycles(__ticks_dc);
+  ^
+/usr/lib/avr/include/util/delay.h:187:2: error: __builtin_avr_delay_cycles expects a compile time integer constant
+  __builtin_avr_delay_cycles(__ticks_dc);
+  ^
+/usr/lib/avr/include/util/delay.h:187:2: error: __builtin_avr_delay_cycles expects a compile time integer constant
+  __builtin_avr_delay_cycles(__ticks_dc);
+  ^
+/usr/lib/avr/include/util/delay.h:187:2: error: __builtin_avr_delay_cycles expects a compile time integer constant
+  __builtin_avr_delay_cycles(__ticks_dc);
+  ^
+make: *** [Makefile:10: all] Error 1
