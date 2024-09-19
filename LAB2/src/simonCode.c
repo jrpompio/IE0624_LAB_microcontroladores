@@ -181,6 +181,7 @@ int main(){
         ledTime = ledTime - 2000;
       break;
       default:
+        state = standby;
       break;
     }
   }
