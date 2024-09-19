@@ -112,7 +112,7 @@ int main(){
       break;
 
       case secuence:
-        _delay_ms(10000);
+        _delay_ms(1000);
         for (int i = 0; i<= counterSecuence -1; i++){
         state = user; 
           bPressed = 0;
@@ -180,6 +180,7 @@ int main(){
         counterSecuence++;
         ledTime = ledTime - 2000;
       break;
+
       default:
         state = standby;
       break;
