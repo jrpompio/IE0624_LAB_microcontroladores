@@ -9,9 +9,10 @@
 #define MYUBRR F_CPU/16/BAUD-1
 
 // DEFINICIONES DE ESTADOS
-#define standby 0         // Define del estado de espera
-#define secuence 1        // Define del estado que genera la suecuencia
-#define user 2            // Define del estado que gestiona el reinicio del juego
+#define standby 0
+#define start 1         // Define del estado de inicio
+#define secuence 2        // Define del estado que genera la suecuencia
+#define user 3            // Define del estado que gestiona el reinicio del juego
 
 void uart_init(unsigned int ubrr);
 void uart_transmit(unsigned char data);
@@ -39,9 +40,11 @@ int main(){
   
   int state = standby;                    // Variable de estado
   int counterSecuence = 4;                // Variable para controlar el tamaño de la secuencia
+  int initSec = 0;
   int secuenceLed[13] = {0};              // Array para guardar la secuencia
   int buttos[4] = {1,2,4,8};              // Numeros representativos de los botones
   int randNum; 
+  int bPressed = 0;
   int bRed = 0;
   int bYellow = 0;
   int bGreen = 0;
@@ -50,8 +53,10 @@ int main(){
   TCCR0B |= (1 << CS01); // Configurar el Timer0 con prescaler de 8
   TCNT0 = 0; // Inicia el contador en 0
 
+  sei();
 
   while (1){
+    _delay_ms(1000);
 
     bRed =    (PIND & (1 << PD0)); // Entrada PD0 como botón 0
     bGreen =  (PIND & (1 << PD1)); // Entrada PD1 como botón 1
@@ -61,49 +66,86 @@ int main(){
 
     switch (state){
       case standby:
+        if (bRed || bGreen || bYellow || bBlue){
+          state = start;
+          }
+      break;
 
-        printf("INICIANDO...");
-        
+      case start:
+
         if (counterSecuence > 13){        // Si el tamaño de la secuencia supera 13 colores debe reiniciarse
           counterSecuence = 4;
         }
-        if (counterSecuence == 4){
-            printf("Digite:");
-            if (bRed || bYellow || bGreen || bBlue){  // Al pulsar cualquier boton inicia el juego
-                state = secuence;
 
+        if (counterSecuence == 4){
+          initSec = 0;
+        } else {
+          initSec = counterSecuence;
+        }
+            state = secuence;
             // Ciclo for donde se genera la secuencia inicial
             for (int i = 0; i<= counterSecuence - 1; i++){
                 randNum = buttos[TCNT0 % 4];
-                printf("numero aleatorio es: %d", randNum);
+                printf("\nnumero aleatorio es: %d ", randNum);
+                _delay_ms(100);
                 secuenceLed[i] = randNum;
             }
-            } else {
-                printf("esperando... ");
-            }
-        // Aca se incrementa la secuencia por cada ronda correcta
-        } else { 
-            state = secuence;
-            printf(" ESTO SOLO DETIENE EL CODIGO BORRAR AL FINAL");
-            randNum = buttos[TCNT0 % 4];
-            secuenceLed[counterSecuence] = randNum;
-            for (int i = 0; i<= counterSecuence - 1; i++){
-                printf("numero aleatorio es: %d", secuenceLed[i]);
-            }
-            counterSecuence++;
-        }
       break;
+
       case secuence:
-        printf("analizando secuencia");
         state = user;
+        _delay_ms(10000);
         for (int i = 0; i<= counterSecuence -1; i++){
-          printf("%d",secuenceLed[i]);
+          bPressed = 0;
+
+        switch (secuenceLed[i]) {
+        case 1:
+            while (!bPressed) {
+                if (PIND & (1 << PD0)) {
+                    bPressed = 1;
+                    printf("Botón Rojo\n");
+                }
+            }
+            break;
+
+        case 2:
+            while (!bPressed) {
+                if (PIND & (1 << PD1)) {
+                    bPressed = 1;
+                    printf("Botón Verde\n");
+                }
+            }
+            break;
+
+        case 4:
+            while (!bPressed) {
+                if (PIND & (1 << PD2)) {
+                    bPressed = 1;
+                    printf("Botón Amarillo\n");
+                }
+            }
+            break;
+
+        case 8:
+            while (!bPressed) {
+                if (PIND & (1 << PD3)) {
+                    bPressed = 1;
+                    printf("Botón Azul\n");
+                }
+            }
+            break;
+
+        default:
+            printf("Error: Valor inesperado en secuencia\n");
+            break;
+        }
         }
         counterSecuence++;
       break;
+
       case user:
-        state = standby;
-        printf("estado que no sirve");
+        state = start;
+        printf("\nestado que no sirve");
       break;
       default:
         printf("Caso default");
