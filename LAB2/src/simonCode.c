@@ -3,11 +3,6 @@
 #include <avr/interrupt.h>
 #include <stdio.h>
 
-// DEFINICIONES DE BAUT RATE
-#define F_CPU 1000000UL         // Frecuencia del CPU 
-#define BAUD 9600
-#define MYUBRR F_CPU/16/BAUD-1
-
 // DEFINICIONES DE ESTADOS
 #define standby 0
 #define start 1         // Define del estado de inicio
@@ -19,22 +14,7 @@
 #define VERDE 4
 #define AZUL 8
 
-void uart_init(unsigned int ubrr);
-void uart_transmit(unsigned char data);
-int uart_putchar(char c, FILE *stream);
-
-FILE uart_output = FDEV_SETUP_STREAM(uart_putchar, NULL, _FDEV_SETUP_WRITE);
-
 int main(){    
-/******************************************************************************
- * PARA UART 
- *****************************************************************************/
-
-  // Inicializar UART con el baud rate definido
-  uart_init(MYUBRR);
-  // Redirigir el standar output hacia UART
-  stdout = &uart_output;
-
 /******************************************************************************
  * Inicio del codigo
  *****************************************************************************/
@@ -69,9 +49,17 @@ int main(){
     bYellow = (PIND & (1 << PD2)); // Entrada PD2 como botón 2
     bBlue =   (PIND & (1 << PD3)); // Entrada PD3 como botón 3
 
-
+    inicio:
     switch (state){
       case standby:
+        PORTB = 0x0F;
+        _delay_ms(1000);
+        PORTB = 0x00;
+        _delay_ms(1000);
+        PORTB = 0x0F;
+        _delay_ms(1000);
+        PORTB = 0x00;
+        _delay_ms(1000);
         if (bRed || bGreen || bYellow || bBlue){
           state = start;
           }
@@ -93,8 +81,8 @@ int main(){
             for (int i = initSec; i<= counterSecuence - 1; i++)
             {
                 randNum = buttos[TCNT0 % 4];
-                printf("\nnumero aleatorio es: %d ", randNum);
-                _delay_ms(100);
+                  PORTB = 0x00;
+                _delay_ms(1000);
                 secuenceLed[i] = randNum;
 
                 if (randNum == ROJO){
@@ -118,8 +106,6 @@ int main(){
                   PORTB = 0x00;
                   _delay_ms(ledTime);
                 }
-
-
             }
       break;
 
@@ -130,87 +116,86 @@ int main(){
           bPressed = 0;
 
         switch (secuenceLed[i]) {
-        case 1:
+        
+        case ROJO:
             while (!bPressed) {
                 if (PIND & (1 << PD0)) {
-                    bPressed = 1;
-                    printf("Botón Rojo\n");
+                     PORTB |= (1 << PB0);
+                  _delay_ms(ledTime);
+                  PORTB = 0x00;
+                  _delay_ms(100);
+                  bPressed = 1;
+                } else if ((PIND & (1 << PD1))||
+                (PIND & (1 << PD2))||(PIND & (1 << PD3))){
+                  state=standby;
+                  goto inicio;
                 }
+
             }
             break;
 
-        case 2:
-            while (!bPressed) {
-                if (PIND & (1 << PD1)) {
-                    bPressed = 1;
-                    printf("Botón Verde\n");
-                }
-            }
-            break;
-
-        case 4:
+        case AMARI:
             while (!bPressed) {
                 if (PIND & (1 << PD2)) {
-                    bPressed = 1;
-                    printf("Botón Amarillo\n");
+                     PORTB |= (1 << PB2);
+                  _delay_ms(ledTime);
+                  PORTB = 0x00;
+                  _delay_ms(100);
+                  bPressed = 1;
+                } else if ((PIND & (1 << PD0))||
+                (PIND & (1 << PD1))||(PIND & (1 << PD3))){
+                  state=standby;
+                  goto inicio;
+                }}
+            break;
+
+            
+
+        case VERDE:
+            while (!bPressed) {
+                if (PIND & (1 << PD1)) {
+                     PORTB |= (1 << PB1);
+                  _delay_ms(ledTime);
+                  PORTB = 0x00;
+                  _delay_ms(100);
+                  bPressed = 1;
+                } else if ((PIND & (1 << PD0))||
+                (PIND & (1 << PD2))||(PIND & (1 << PD3))){
+                  state=standby;
+                  goto inicio;
                 }
             }
             break;
 
-        case 8:
+        case AZUL:
             while (!bPressed) {
                 if (PIND & (1 << PD3)) {
-                    bPressed = 1;
-                    printf("Botón Azul\n");
+                     PORTB |= (1 << PB3);
+                  _delay_ms(ledTime);
+                  PORTB = 0x00;
+                  _delay_ms(100);
+                  bPressed = 1;
+                } else if ((PIND & (1 << PD0))||
+                (PIND & (1 << PD1))||(PIND & (1 << PD2))){
+                  state=standby;
+                  goto inicio;
                 }
             }
             break;
 
         default:
-            printf("Error: Valor inesperado en secuencia\n");
             break;
         }
         }
         counterSecuence++;
+        ledTime = ledTime;
       break;
 
       case user:
         state = start;
-        printf("\nestado que no sirve");
       break;
       default:
-        printf("Caso default");
       break;
     }
   }
-}
-
-// Inicializa UART
-void uart_init(unsigned int ubrr) {
-  // Configura el baud rate
-  UBRRH = (unsigned char)(ubrr >> 8);
-  UBRRL = (unsigned char)ubrr;
-  
-  // Habilita transmisión
-  UCSRB = (1 << TXEN);
-  
-  // Configura el formato del marco de datos: 8 bits de datos, 1 bit de parada
-  UCSRC = (1 << UCSZ1) | (1 << UCSZ0);
-}
-
-// Envía un byte a través de UART
-void uart_transmit(unsigned char data) {
-  // Espera hasta que el buffer de transmisión esté vacío
-  while (!(UCSRA & (1 << UDRE)));
-  // Coloca el dato en el registro de transmisión
-  UDR = data;
-}
-
-// Función para redirigir stdout a UART
-int uart_putchar(char c, FILE *stream) {
-  if (c == '\n') {
-    uart_transmit('\r'); // Carriage return para nueva línea en terminales
-  }
-  uart_transmit(c);
-  return 0;
 }
