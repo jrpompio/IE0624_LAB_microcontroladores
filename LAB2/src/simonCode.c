@@ -2,7 +2,6 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include <stdio.h>
-#include <avr/iotn4313.h>
 
 // DEFINICIONES DE BAUT RATE
 #define F_CPU 1000000UL         // Frecuencia del CPU 
@@ -46,51 +45,56 @@ int main(){
   int bRed = 0;
   int bYellow = 0;
   int bGreen = 0;
-  int bBlue = 0;                           // Variable para guardar el nuevo color aleatorio
+  int bBlue = 0;
+
+  TCCR0B |= (1 << CS01); // Configurar el Timer0 con prescaler de 8
+  TCNT0 = 0; // Inicia el contador en 0
 
 
   while (1){
 
-    bRed =    !(PIND & (1 << PD0)); // Entrada PD0 como botón 0
-    bGreen =  !(PIND & (1 << PD1)); // Entrada PD1 como botón 1
-    bYellow = !(PIND & (1 << PD2)); // Entrada PD2 como botón 2
-    bBlue =   !(PIND & (1 << PD3)); // Entrada PD3 como botón 3
+    bRed =    (PIND & (1 << PD0)); // Entrada PD0 como botón 0
+    bGreen =  (PIND & (1 << PD1)); // Entrada PD1 como botón 1
+    bYellow = (PIND & (1 << PD2)); // Entrada PD2 como botón 2
+    bBlue =   (PIND & (1 << PD3)); // Entrada PD3 como botón 3
 
 
     switch (state){
       case standby:
+
+        printf("INICIANDO...");
+        
         if (counterSecuence > 13){        // Si el tamaño de la secuencia supera 13 colores debe reiniciarse
           counterSecuence = 4;
         }
         if (counterSecuence == 4){
-            printf("\n\nINICIANDO...\n");
-            printf("\nDigite:\n");
+            printf("Digite:");
             if (bRed || bYellow || bGreen || bBlue){  // Al pulsar cualquier boton inicia el juego
                 state = secuence;
-                printf("%d",counterSecuence);
 
             // Ciclo for donde se genera la secuencia inicial
             for (int i = 0; i<= counterSecuence - 1; i++){
-                randNum = buttos[rand() % 4];
-                printf("\nnumero aleatorio es:\n %d", randNum);
+                randNum = buttos[TCNT0 % 4];
+                printf("numero aleatorio es: %d", randNum);
                 secuenceLed[i] = randNum;
             }
             } else {
-                printf("esperando... \n");
+                printf("esperando... ");
             }
         // Aca se incrementa la secuencia por cada ronda correcta
         } else { 
-            printf("\n\n ESTO SOLO DETIENE EL CODIGO BORRAR AL FINAL");
-            randNum = buttos[rand() % 4];
+            state = secuence;
+            printf(" ESTO SOLO DETIENE EL CODIGO BORRAR AL FINAL");
+            randNum = buttos[TCNT0 % 4];
             secuenceLed[counterSecuence] = randNum;
             for (int i = 0; i<= counterSecuence - 1; i++){
-                printf("\nnumero aleatorio es:\n %d", secuenceLed[i]);
+                printf("numero aleatorio es: %d", secuenceLed[i]);
             }
             counterSecuence++;
         }
       break;
       case secuence:
-        printf("\nanalizando secuencia\n");
+        printf("analizando secuencia");
         state = user;
         for (int i = 0; i<= counterSecuence -1; i++){
           printf("%d",secuenceLed[i]);
@@ -99,7 +103,7 @@ int main(){
       break;
       case user:
         state = standby;
-        printf("\nestado que no sirve\n");
+        printf("estado que no sirve");
       break;
       default:
         printf("Caso default");
