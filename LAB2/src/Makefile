@@ -9,7 +9,7 @@ SRCS=simonCode.c
 all:
 	${CC} ${CFLAGS} -o ${TARGET}.bin ${SRCS}
 	${OBJCOPY} -j .text -j .data -O ihex ${TARGET}.bin ${TARGET}.hex
-	simulide prueba.simu
+	simulide lab2.simu
 	make clean
 
 flash:

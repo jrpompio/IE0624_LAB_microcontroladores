@@ -14,6 +14,11 @@
 #define secuence 2        // Define del estado que genera la suecuencia
 #define user 3            // Define del estado que gestiona el reinicio del juego
 
+#define ROJO 1
+#define AMARI 2
+#define VERDE 4
+#define AZUL 8
+
 void uart_init(unsigned int ubrr);
 void uart_transmit(unsigned char data);
 int uart_putchar(char c, FILE *stream);
@@ -35,14 +40,15 @@ int main(){
  *****************************************************************************/
 
   // Configuración de puertos B y D como entrada/salida
-  DDRB = 0x0F; // Configura los pines 0,1,2 y 3 del puerto B como salida
+  DDRB = 0x0F; // Configura los pines 0, 1, 2 y 3 del puerto B como salida
   DDRD = 0x00; // Configura todos los pines del puerto D como entrada
   
   int state = standby;                    // Variable de estado
   int counterSecuence = 4;                // Variable para controlar el tamaño de la secuencia
   int initSec = 0;
+  int ledTime = 20000;
   int secuenceLed[13] = {0};              // Array para guardar la secuencia
-  int buttos[4] = {1,2,4,8};              // Numeros representativos de los botones
+  int buttos[4] = {ROJO, AMARI, VERDE, AZUL};              // Numeros representativos de los botones
   int randNum; 
   int bPressed = 0;
   int bRed = 0;
@@ -56,7 +62,7 @@ int main(){
   sei();
 
   while (1){
-    _delay_ms(1000);
+    _delay_ms(5000);
 
     bRed =    (PIND & (1 << PD0)); // Entrada PD0 como botón 0
     bGreen =  (PIND & (1 << PD1)); // Entrada PD1 como botón 1
@@ -84,11 +90,36 @@ int main(){
         }
             state = secuence;
             // Ciclo for donde se genera la secuencia inicial
-            for (int i = 0; i<= counterSecuence - 1; i++){
+            for (int i = initSec; i<= counterSecuence - 1; i++)
+            {
                 randNum = buttos[TCNT0 % 4];
                 printf("\nnumero aleatorio es: %d ", randNum);
                 _delay_ms(100);
                 secuenceLed[i] = randNum;
+
+                if (randNum == ROJO){
+                  PORTB |= (1 << PB0);
+                  _delay_ms(ledTime);
+                  PORTB = 0x00;
+                  _delay_ms(ledTime);
+                } else if (randNum == AMARI){
+                  PORTB |= (1 << PB2);
+                  _delay_ms(ledTime);
+                  PORTB = 0x00;
+                  _delay_ms(ledTime);
+                  } else if (randNum == VERDE){
+                  PORTB |= (1 << PB1);
+                  _delay_ms(ledTime);
+                  PORTB = 0x00;
+                  _delay_ms(ledTime);
+                } else if (randNum == AZUL){
+                  PORTB |= (1 << PB3);
+                  _delay_ms(ledTime);
+                  PORTB = 0x00;
+                  _delay_ms(ledTime);
+                }
+
+
             }
       break;
 
