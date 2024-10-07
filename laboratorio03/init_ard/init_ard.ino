@@ -112,6 +112,7 @@ float peakVoltage(float arr[], int size) {
 void setup() {
   // Instrucciones iniciales
   Serial.begin(9600);
+  pinMode(A4, INPUT);  // Configura A4 como entrada digital para lectura de AC/DC
 }
 
 void loop() {
