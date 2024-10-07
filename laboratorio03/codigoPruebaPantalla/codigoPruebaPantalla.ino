@@ -66,18 +66,7 @@ void screen(float voltage0, float voltage1, float voltage2, float voltage3){
 
   }
 
-void loop() {
-  int sensorValue0 = analogRead(A0);  // Leer tension en A0
-  int sensorValue1 = analogRead(A1);  // Leer tension en A1
-  int sensorValue2 = analogRead(A2);  // Leer tension en A2
-  int sensorValue3 = analogRead(A3);  // Leer tension en A3
-  float voltage0 = sensorValue0 * (5.0 / 1023.0); // Convertir a voltaje
-  float voltage1 = sensorValue1 * (5.0 / 1023.0); // Convertir a voltaje
-  float voltage2 = sensorValue2 * (5.0 / 1023.0); // Convertir a voltaje
-  float voltage3 = sensorValue3 * (5.0 / 1023.0); // Convertir a voltaje
-
-  screen(voltage0, voltage1, voltage2, voltage3);
-
+void serialOut(float voltage0, float voltage1, float voltage2, float voltage3){
   Serial.print("Input 0: ");
   Serial.print(voltage0);
   Serial.println(" V");
@@ -96,6 +85,21 @@ void loop() {
 
   Serial.println("-------------------");  // Separador entre lecturas
 
+}
+
+void loop() {
+  int sensorValue0 = analogRead(A0);  // Leer tension en A0
+  int sensorValue1 = analogRead(A1);  // Leer tension en A1
+  int sensorValue2 = analogRead(A2);  // Leer tension en A2
+  int sensorValue3 = analogRead(A3);  // Leer tension en A3
+  float voltage0 = sensorValue0 * (5.0 / 1023.0); // Convertir a voltaje
+  float voltage1 = sensorValue1 * (5.0 / 1023.0); // Convertir a voltaje
+  float voltage2 = sensorValue2 * (5.0 / 1023.0); // Convertir a voltaje
+  float voltage3 = sensorValue3 * (5.0 / 1023.0); // Convertir a voltaje
+
+  screen(voltage0, voltage1, voltage2, voltage3);
+  serialOut(voltage0, voltage1, voltage2, voltage3);
+  
   // Esperar 500ms
   delay(500);
 }
