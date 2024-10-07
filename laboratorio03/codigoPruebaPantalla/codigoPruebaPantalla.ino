@@ -16,6 +16,9 @@ void setup() {
   display.begin();
   display.setContrast(50);   // Ajustar el contraste de la pantalla
 
+  // Inicializar salida serial
+  Serial.begin(9600);
+
   // Limpiar pantalla
   display.clearDisplay();
   display.setTextSize(0.1);
@@ -75,7 +78,24 @@ void loop() {
 
   screen(voltage0, voltage1, voltage2, voltage3);
 
-  
+  Serial.print("Input 0: ");
+  Serial.print(voltage0);
+  Serial.println(" V");
+
+  Serial.print("Input 1: ");
+  Serial.print(voltage1);
+  Serial.println(" V");
+
+  Serial.print("Input 2: ");
+  Serial.print(voltage2);
+  Serial.println(" V");
+
+  Serial.print("Input 3: ");
+  Serial.print(voltage3);
+  Serial.println(" V");
+
+  Serial.println("-------------------");  // Separador entre lecturas
+
   // Esperar 500ms
   delay(500);
 }
