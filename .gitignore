@@ -38,3 +38,7 @@
 
 # archivo generado de ensamblador
 *.asm
+
+#arch_maqueta
+maqueta.c
+prueba.simu
