@@ -1,11 +1,29 @@
 #include <TaskScheduler.h>
 #include <math.h>
+#include <Adafruit_GFX.h>      // Librería gráfica
+#include <Adafruit_PCD8544.h>  // Librería para la pantalla Nokia 5110
 
+// Definir pines de conexión
+#define RST_PIN   8
+#define CE_PIN    7
+#define DC_PIN    6
+#define DIN_PIN   5
+#define CLK_PIN   4
+
+// Inicializar la pantalla
+Adafruit_PCD8544 display = Adafruit_PCD8544(CLK_PIN, DIN_PIN, DC_PIN, CE_PIN, RST_PIN);
+
+// Objeto para multitasking
 Scheduler voltmeter;
+
+// Funciones de pantalla
+void screen(float voltage0, float voltage1, float voltage2, float voltage3);
+void serialOut(float voltage0, float voltage1, float voltage2, float voltage3);
 
 // Funciones para mapeo y obtención de valor rms
 float mapInput(int inputValue, int limitValue);
 float peakVoltage(float arr[], int size);
+
 
 // Funciones de muestreo y display
 void readVoltage();
@@ -79,17 +97,8 @@ void mapVoltage() {
 };
 
 void showVoltage() {
-  // Imprimir valores mapeados en el Monitor Serial
-  Serial.print("Mapped A0: ");
-  Serial.println(v0);
-  Serial.print("Mapped A1: ");
-  Serial.println(v1);
-  Serial.print("Mapped A2: ");
-  Serial.println(v2);
-  Serial.print("Mapped A3: ");
-  Serial.println(v3);
-
-  Serial.println();  // Línea en blanco para separar las lecturas
+  screen(v0, v1, v2, v3);
+  serialOut(v0, v1, v2, v3);
 };
 
 
@@ -109,10 +118,78 @@ float peakVoltage(float arr[], int size) {
   return maximo/sqrt(2);
 }
 
+void screen(float voltage0, float voltage1, float voltage2, float voltage3){
+  // Limpiar pantalla
+  display.clearDisplay();
+
+  // Mostrar el valor del sensor
+  display.setCursor(0, 0);
+  display.print("input0: ");
+  display.print(voltage0);
+  display.println("V");
+
+  display.setCursor(0, 10);
+  display.print("input1: ");
+  display.print(voltage1);
+  display.println("V");
+
+  display.setCursor(0, 20);
+  display.print("input2: ");
+  display.print(voltage2);
+  display.println("V");
+
+  display.setCursor(0, 30);
+  display.print("input3: ");
+  display.print(voltage3);
+  display.println("V");
+
+  display.setCursor(0, 41);
+  display.print("Vmax: 24V");
+
+  // Mostrar en pantalla
+  display.display();
+
+  }
+
+void serialOut(float voltage0, float voltage1, float voltage2, float voltage3){
+  Serial.print("Input 0: ");
+  Serial.print(voltage0);
+  Serial.println(" V");
+
+  Serial.print("Input 1: ");
+  Serial.print(voltage1);
+  Serial.println(" V");
+
+  Serial.print("Input 2: ");
+  Serial.print(voltage2);
+  Serial.println(" V");
+
+  Serial.print("Input 3: ");
+  Serial.print(voltage3);
+  Serial.println(" V");
+
+  Serial.println("-------------------");  // Separador entre lecturas
+
+}
+
 void setup() {
   // Instrucciones iniciales
   Serial.begin(9600);
   pinMode(A4, INPUT);  // Configura A4 como entrada digital para lectura de AC/DC
+  // Inicializar la pantalla
+  display.begin();
+  display.setContrast(50);   // Ajustar el contraste de la pantalla
+  // Limpiar pantalla
+  display.clearDisplay();
+  display.setTextSize(0.1);
+    // Escribir texto
+  display.setTextColor(BLACK);
+  display.setCursor(0, 0);
+  display.println("Hola!");
+  display.println("PCD8544");
+
+  // Mostrar cambios en pantalla
+  display.display();
 }
 
 void loop() {
