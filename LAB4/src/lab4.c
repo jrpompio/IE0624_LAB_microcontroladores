@@ -81,7 +81,7 @@ static void spi_setup(void) {
     gpio_mode_setup(GYRO_CS_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GYRO_CS_PIN);
     gpio_set(GYRO_CS_PORT, GYRO_CS_PIN);
 
-    spi_disable(SPI_BUS);
+    //spi_disable(SPI_BUS);
     spi_set_master_mode(SPI_BUS);
     spi_set_baudrate_prescaler(SPI_BUS, SPI_CR1_BR_FPCLK_DIV_64);
     spi_set_clock_polarity_0(SPI_BUS);
@@ -94,17 +94,27 @@ static void spi_setup(void) {
 }
 
 static void gyro_setup(void) {
-    // Habilitar el giroscopio, configurar el rango de medición a 250 dps,
-    // deshabilitar el filtro de paso alto y habilitar los 3 ejes
     gpio_clear(GYRO_CS_PORT, GYRO_CS_PIN);
+
+    // Configurar CTRL_REG1: Frecuencia de salida de 95 Hz, modo normal, ejes XYZ activos
     spi_xfer(SPI_BUS, 0x20); // CTRL_REG1
-    spi_xfer(SPI_BUS, 0xCF); // Activar ejes X, Y, Z y 760 Hz (DR1=1, DR0=1)
+    spi_xfer(SPI_BUS, 0x0F); // Configuración: 95 Hz, modo normal, ejes XYZ activos
+
+//    // Configurar CTRL_REG2: Sin filtro de paso alto
+//    spi_xfer(SPI_BUS, 0x21); // CTRL_REG2
+//    spi_xfer(SPI_BUS, 0x00); // Sin filtro
+//
+//    // Configurar CTRL_REG4: Rango de ±250 dps
 //    spi_xfer(SPI_BUS, 0x23); // CTRL_REG4
-//    spi_xfer(SPI_BUS, 0x00); // 250 dps (FS1 = 0, FS0 = 0) 
-//    spi_xfer(SPI_BUS, 0x24); // CTRL_REG5
-//    spi_xfer(SPI_BUS, 0x00); // Deshabilitar filtro paso alto (HPen = 0)
+//    spi_xfer(SPI_BUS, 0x00); // Configuración: ±250 dps
+//
     gpio_set(GYRO_CS_PORT, GYRO_CS_PIN);
 }
+
+
+
+//    spi_xfer(SPI_BUS, 0x24); // CTRL_REG5
+//    spi_xfer(SPI_BUS, 0x00); // Deshabilitar filtro paso alto (HPen = 0)
 
 static uint8_t gyro_read_who_am_i(void) {
     uint8_t who_am_i;
@@ -117,7 +127,20 @@ static uint8_t gyro_read_who_am_i(void) {
     return who_am_i;
 }
 
+static void gyro_read_axes(int16_t *x, int16_t *y, int16_t *z) {
+    uint8_t data[6];
 
+    gpio_clear(GYRO_CS_PORT, GYRO_CS_PIN);
+    spi_xfer(SPI_BUS, 0x28 | 0x80); // Lectura del registro OUT_X_L
+    for (int i = 0; i < 6; i++) {
+        data[i] = spi_xfer(SPI_BUS, 0x00);
+    }
+    gpio_set(GYRO_CS_PORT, GYRO_CS_PIN);
+
+    *x = (int16_t)((data[1] << 8) | data[0]);
+    *y = (int16_t)((data[3] << 8) | data[2]);
+    *z = (int16_t)((data[5] << 8) | data[4]);
+}
 
 int main(void) {
     clock_setup();
@@ -125,12 +148,15 @@ int main(void) {
     systick_setup();
     spi_setup();
     gyro_setup();
-
+    
     uint8_t who_am_i = gyro_read_who_am_i();
+    int16_t x, y, z;
+    printf("WHO_AM_I: 0x%X\n", who_am_i);
 
     while (1)
     {
-        printf("WHO_AM_I: 0x%X\n", who_am_i);
+        gyro_read_axes(&x, &y, &z);   
+        printf("X: %d, Y: %d, Z: %d\n", x, y, z);
         delay_ms(1000);
     }
     
