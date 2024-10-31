@@ -48,7 +48,7 @@ float valoresA3[17];
 // Tarea para leer tensión eléctrica
 Task read(1, TASK_FOREVER, &readVoltage, &voltmeter, true);
 Task mapping(1, TASK_FOREVER, &mapVoltage, &voltmeter, true);
-Task showing(2000, TASK_FOREVER, &showVoltage, &voltmeter, true);
+Task showing(500, TASK_FOREVER, &showVoltage, &voltmeter, true);
 
 void readVoltage() {
   // Leer valores de A0, A1, A2 y A3
@@ -99,6 +99,11 @@ void mapVoltage() {
 void showVoltage() {
   screen(v0, v1, v2, v3);
   serialOut(v0, v1, v2, v3);
+  if (abs(v0) > 20 || abs(v1) > 20 || abs(v2) > 20 || abs(v3) > 20) {
+    digitalWrite(13, HIGH);  // Enciende el led de seguridad
+  } else {
+    digitalWrite(13, LOW);   // Apaga el led
+  }
 };
 
 
@@ -124,22 +129,22 @@ void screen(float voltage0, float voltage1, float voltage2, float voltage3){
 
   // Mostrar el valor del sensor
   display.setCursor(0, 0);
-  display.print("input0: ");
+  display.print("in0: ");
   display.print(voltage0);
   display.println("V");
 
   display.setCursor(0, 10);
-  display.print("input1: ");
+  display.print("in1: ");
   display.print(voltage1);
   display.println("V");
 
   display.setCursor(0, 20);
-  display.print("input2: ");
+  display.print("in2: ");
   display.print(voltage2);
   display.println("V");
 
   display.setCursor(0, 30);
-  display.print("input3: ");
+  display.print("in3: ");
   display.print(voltage3);
   display.println("V");
 
@@ -176,6 +181,7 @@ void setup() {
   // Instrucciones iniciales
   Serial.begin(9600);
   pinMode(A4, INPUT);  // Configura A4 como entrada digital para lectura de AC/DC
+  pinMode(13, OUTPUT);
   // Inicializar la pantalla
   display.begin();
   display.setContrast(50);   // Ajustar el contraste de la pantalla
