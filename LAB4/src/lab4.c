@@ -9,6 +9,8 @@
 
 #define USART_CONSOLE USART1
 #define SPI_BUS SPI5
+#define GYRO_CS_PORT GPIOC
+#define GYRO_CS_PIN GPIO1
 
 static void clock_setup(void);
 static void usart_setup(void);
@@ -72,6 +74,48 @@ static void delay_ms(uint32_t delay) {
     while ((msTicks - current_tick) < delay);
 }
 
+static void spi_setup(void) {
+    gpio_mode_setup(GPIOF, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO7 | GPIO8 | GPIO9);
+    gpio_set_af(GPIOF, GPIO_AF5, GPIO7 | GPIO8 | GPIO9);
+
+    gpio_mode_setup(GYRO_CS_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GYRO_CS_PIN);
+    gpio_set(GYRO_CS_PORT, GYRO_CS_PIN);
+
+    spi_disable(SPI_BUS);
+    spi_set_master_mode(SPI_BUS);
+    spi_set_baudrate_prescaler(SPI_BUS, SPI_CR1_BR_FPCLK_DIV_64);
+    spi_set_clock_polarity_0(SPI_BUS);
+    spi_set_clock_phase_1(SPI_BUS);
+    spi_set_full_duplex_mode(SPI_BUS);
+    spi_enable_software_slave_management(SPI_BUS);
+    spi_send_msb_first(SPI_BUS);
+    spi_set_nss_high(SPI_BUS);
+    spi_enable(SPI_BUS);
+}
+
+static void gyro_setup(void) {
+    // Habilitar el giroscopio, configurar el rango de medición a 250 dps,
+    // deshabilitar el filtro de paso alto y habilitar los 3 ejes
+    gpio_clear(GYRO_CS_PORT, GYRO_CS_PIN);
+    spi_xfer(SPI_BUS, 0x20); // CTRL_REG1
+    spi_xfer(SPI_BUS, 0xCF); // Activar ejes X, Y, Z y 760 Hz (DR1=1, DR0=1)
+//    spi_xfer(SPI_BUS, 0x23); // CTRL_REG4
+//    spi_xfer(SPI_BUS, 0x00); // 250 dps (FS1 = 0, FS0 = 0) 
+//    spi_xfer(SPI_BUS, 0x24); // CTRL_REG5
+//    spi_xfer(SPI_BUS, 0x00); // Deshabilitar filtro paso alto (HPen = 0)
+    gpio_set(GYRO_CS_PORT, GYRO_CS_PIN);
+}
+
+static uint8_t gyro_read_who_am_i(void) {
+    uint8_t who_am_i;
+
+    gpio_clear(GYRO_CS_PORT, GYRO_CS_PIN);
+    spi_xfer(SPI_BUS, 0x0F | 0x80); // Lectura del registro WHO_AM_I
+    who_am_i = spi_xfer(SPI_BUS, 0x00);
+    gpio_set(GYRO_CS_PORT, GYRO_CS_PIN);
+
+    return who_am_i;
+}
 
 
 
@@ -79,9 +123,14 @@ int main(void) {
     clock_setup();
     usart_setup();
     systick_setup();
+    spi_setup();
+    gyro_setup();
+
+    uint8_t who_am_i = gyro_read_who_am_i();
+
     while (1)
     {
-        printf("hola mundo :3\n");
+        printf("WHO_AM_I: 0x%X\n", who_am_i);
         delay_ms(1000);
     }
     
