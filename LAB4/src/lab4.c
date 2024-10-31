@@ -156,7 +156,7 @@ int main(void) {
     while (1)
     {
         gyro_read_axes(&x, &y, &z);   
-        printf("X: %d, Y: %d, Z: %d\n", x, y, z);
+        printf("X: %d\nY: %d\nZ: %d\n", x, y, z);
         delay_ms(1000);
     }
     
