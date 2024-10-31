@@ -4,7 +4,7 @@ import serial
 import json
 
 # Configuración de la conexión serial
-puerto = '/tmp/ttyS1'  # Cambia '/tmp/ttyS1' por tu puerto específico
+puerto = '/dev/ttyACM0'  # Cambia '/tmp/ttyS1' por tu puerto específico
 ser = serial.Serial(puerto, 9600, timeout=1)
 time.sleep(2)
 
@@ -28,12 +28,11 @@ client.on_connect = on_connect
 client.connect(THINGSBOARD_HOST, 1883, 60)
 client.loop_start()
 
-def enviar_telemetria(x, y, z, voltage):
+def enviar_telemetria(x, y, z):
     payload = json.dumps({
         "eje_X": x,
         "eje_Y": y,
-        "eje_Z": z,
-        "nivel_bateria": voltage
+        "eje_Z": z
     })
     client.publish("v1/devices/me/telemetry", payload)
     print("Datos enviados:", payload)
@@ -41,27 +40,25 @@ def enviar_telemetria(x, y, z, voltage):
 while True:
     if ser.in_waiting > 0:
         # Inicializar variables para almacenar datos
-        x = y = z = battery = None
+        x = y = z = None
 
         # Leer datos del puerto serial
         for _ in range(5):  # Lee 5 líneas (4 valores y 1 separador)
             linea = ser.readline().decode('utf-8').strip()
             try:
                 # Extraer valores según etiqueta
-                if linea.startswith("X:"):
-                    x = float(linea.split(":")[1].strip())
-                elif linea.startswith("Y:"):
-                    y = float(linea.split(":")[1].strip())
-                elif linea.startswith("Z:"):
-                    z = float(linea.split(":")[1].strip())
-                elif linea.startswith("Battery:"):
-                    battery = float(linea.split(":")[1].strip())
+                if linea.startswith("X: "):
+                    x = float(linea.split(": ")[1].strip())
+                elif linea.startswith("Y: "):
+                    y = float(linea.split(": ")[1].strip())
+                elif linea.startswith("Z: "):
+                    z = float(linea.split(": ")[1].strip())
             except ValueError:
                 print("Error en el formato de datos:", linea)
         
         # Verificar que todos los datos se han leído correctamente
-        if x is not None and y is not None and z is not None and battery is not None:
-            enviar_telemetria(x, y, z, battery)
+        if x is not None and y is not None and z is not None:
+            enviar_telemetria(x, y, z)
         else:
             print("Error: datos incompletos recibidos")
     

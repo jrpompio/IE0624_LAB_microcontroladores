@@ -29,7 +29,7 @@ static void usart_setup(void) {
     gpio_mode_setup(GPIOA, GPIO_MODE_AF, GPIO_PUPD_NONE, GPIO9);
     gpio_set_af(GPIOA, GPIO_AF7, GPIO9);
 
-    usart_set_baudrate(USART_CONSOLE, 115200);
+    usart_set_baudrate(USART_CONSOLE, 9600);
     usart_set_databits(USART_CONSOLE, 8);
     usart_set_stopbits(USART_CONSOLE, USART_STOPBITS_1);
     usart_set_mode(USART_CONSOLE, USART_MODE_TX);
