@@ -2,6 +2,7 @@
 #include <libopencm3/stm32/gpio.h>
 #include <libopencm3/stm32/spi.h>
 #include <libopencm3/stm32/usart.h>
+#include <libopencm3/cm3/systick.h>
 #include <errno.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -9,6 +10,8 @@
 #define USART_CONSOLE USART1
 #define SPI_BUS SPI5
 
+static void clock_setup(void);
+static void usart_setup(void);
 int _write(int file, char *ptr, int len);
 
 static void clock_setup(void) {
@@ -50,15 +53,36 @@ int _write(int file, char *ptr, int len) {
     return -1;
 }
 
+// Función para configurar el SysTick
+static void systick_setup(void) {
+    systick_set_clocksource(STK_CSR_CLKSOURCE_AHB);
+    systick_set_reload(168000); // 1ms con reloj de 168MHz
+    systick_interrupt_enable();
+    systick_counter_enable();
+}
+
+volatile uint32_t msTicks;
+
+void sys_tick_handler(void) {
+    msTicks++;
+}
+
+static void delay_ms(uint32_t delay) {
+    uint32_t current_tick = msTicks;
+    while ((msTicks - current_tick) < delay);
+}
+
 
 
 
 int main(void) {
     clock_setup();
     usart_setup();
+    systick_setup();
     while (1)
     {
-        printf("hola mundo\n");
+        printf("hola mundo :3\n");
+        delay_ms(1000);
     }
     
     
