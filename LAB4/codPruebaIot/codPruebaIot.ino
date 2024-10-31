@@ -5,16 +5,16 @@ void setup() {
 
 void serialOut(float x, float y, float z, float voltage) {
   // Enviar los valores de X, Y, Z y voltaje al puerto serial
-  Serial.print("X: ");
+  Serial.print("X:");
   Serial.println(x);
 
-  Serial.print("Y: ");
+  Serial.print("Y:");
   Serial.println(y);
 
-  Serial.print("Z: ");
+  Serial.print("Z:");
   Serial.println(z);
 
-  Serial.print("Battery: ");
+  Serial.print("Battery:");
   Serial.println(voltage);
 
   Serial.println("-------------------");  // Separador entre lecturas
