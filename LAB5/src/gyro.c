@@ -74,7 +74,7 @@ void gyro_setup(void)
 
     /* Configurar registros del giroscopio */
     gyro_write_register(CTRL_REG1, 0xFF); // Habilitar ejes, modo normal, data rate de 95 Hz
-//    gyro_write_register(CTRL_REG2, 0xA1);
+    gyro_write_register(CTRL_REG2, 0x10);
     gyro_write_register(CTRL_REG4, 0x00); // Actualización continua, escala de 250 dps
 }
 
@@ -155,3 +155,10 @@ static void gyro_write_register(uint8_t reg, uint8_t value)
     gpio_set(GYRO_CS_PORT, GYRO_CS); // CS alto
 }
 
+void filtro_dig(int16_t *w, float *w_rate) {
+    *w_rate = *w;
+    *w_rate = *w_rate * 1e-3;    
+    if (*w_rate >= -1.0 && *w_rate <= 1.0) {
+        *w_rate = 0.0;
+    }
+}

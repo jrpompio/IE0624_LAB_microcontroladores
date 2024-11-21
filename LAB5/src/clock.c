@@ -3,12 +3,14 @@
 
 #include <libopencm3/stm32/rcc.h>
 #include <libopencm3/cm3/systick.h>
+#include <libopencm3/cm3/nvic.h>
 #include "clock.h"
 
 /* Variable para contar los milisegundos desde el arranque */
 static volatile uint32_t system_millis;
 
 /* Handler para SysTick */
+
 void sys_tick_handler(void)
 {
     system_millis++;
