@@ -2,7 +2,7 @@
 # Archivo de construcción para compilar el proyecto del giroscopio utilizando libopencm3
 
 # Lista de archivos objeto
-OBJS = clock.o console.o gyro.o 
+OBJS = clock.o console.o gyro.o sdram.o lcd-spi.o gfx.o
 
 # Nombre del binario
 BINARY = gyroProject

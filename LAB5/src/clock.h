@@ -16,7 +16,7 @@ void msleep(uint32_t delay);
 uint32_t mtime(void);
 
 /* Handler para SysTick */
-void sys_tick_handler(void);
+// void sys_tick_handler(void);
 
 #endif /* __CLOCK_H */
 

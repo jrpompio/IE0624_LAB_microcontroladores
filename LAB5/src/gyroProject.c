@@ -1,51 +1,67 @@
 /* main.c */
 /* Programa principal que inicializa el sistema y muestra los datos del giroscopio */
 
+#include <stdio.h>
+#include <stdint.h>
 #include "clock.h"
 #include "console.h"
 #include "gyro.h"
-#include <stdio.h>
-
-void filtro_dig(float *w_valor);
-void filtro_dig(float *w_valor) {
-    if (*w_valor >= -1.0 && *w_valor <= 1.0) {
-        *w_valor = 0.0; // Si está en el rango [-1.0, 1.0], lo convierte a 0.0
-    }
-}
+#include "sdram.h"
+#include "lcd-spi.h"
+#include "gfx.h"
 
 int main(void)
 {
-    int16_t x, y, z;
-    float sensitivity = 1e-3; // Sensibilidad para ±250 dps
-    float x_rate, y_rate, z_rate;
-
     /* Inicializar el sistema */
     clock_setup();
     console_setup();
     gyro_setup();
-
-    /* Calibrar el giroscopio */
     gyro_calibrate();
+    sdram_init();
+	lcd_spi_init();
+	gfx_init(lcd_draw_pixel, 240, 320);
+    /* Calibrar el giroscopio */
+
+    int16_t x, y, z;
+    float x_rate, y_rate, z_rate;
+    
+    char buffer_x[32];
+    char buffer_y[32];
+    char buffer_z[32];
+    
+    
+    gfx_fillScreen(LCD_BLACK);
+    gfx_setTextSize(3);
 
     /* Bucle principal */
     while (1)
     {
         /* Leer datos del giroscopio */
         gyro_read_xyz(&x, &y, &z);
-
-        /* Convertir a velocidades angulares */
-        x_rate = x * sensitivity;
-        y_rate = y * sensitivity;
-        z_rate = z * sensitivity;
-        filtro_dig(&x_rate);
-        filtro_dig(&y_rate);
-        filtro_dig(&z_rate);
-
+        filtro_dig(&x, &x_rate);
+        filtro_dig(&y, &y_rate);
+        filtro_dig(&z, &z_rate);
         
-        /* Mostrar los valores */
+		gfx_setTextColor(LCD_RED, LCD_BLACK);
+        gfx_setCursor(15, 70);
+        sprintf(buffer_x, "x: %.2f", x_rate);
+        gfx_puts(buffer_x);
+		
+        gfx_setTextColor(LCD_GREEN, LCD_BLACK);
+        gfx_setCursor(15, 120);
+        sprintf(buffer_y, "y: %.2f", y_rate);
+        gfx_puts(buffer_y);
+
+		gfx_setTextColor(LCD_BLUE, LCD_BLACK);
+        gfx_setCursor(15, 170);
+        sprintf(buffer_z, "z: %.2f", z_rate);
+        gfx_puts(buffer_z);
+        
         printf("%.2f,%.2f,%.2f\n", x_rate, y_rate, z_rate);
 
         msleep(100); // Esperar 100 ms
+        lcd_show_frame();
+        gfx_fillScreen(LCD_BLACK);
     }
 
     return 0;
