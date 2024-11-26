@@ -1,3 +1,4 @@
+# Makefile
 # Configura el puerto de conexión
 PORT=/dev/ttyACM0
 
@@ -11,6 +12,7 @@ all: upload
 upload:
 	@for file in $(PY_FILES); do \
 		echo "Copiando $$file..."; \
-		mpremote connect $(PORT) cp $$file:$$file; \
+		mpremote connect $(PORT) rm $$file ; \
+		mpremote connect $(PORT) cp $$file :; \
 	done
-
+	mpremote connect $(PORT) run main.py
