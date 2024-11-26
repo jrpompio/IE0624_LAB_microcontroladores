@@ -1,4 +1,6 @@
 # wifi.py
+
+import time
 from machine import UART, Pin
 
 # Configuración UART
@@ -9,12 +11,12 @@ uart = UART(0, baudrate=115200, tx=Pin(0), rx=Pin(1))
 def send_command(cmd, delay=1):
     """
     Envia un comanto AT al ESP8266 y maneja la respuesta.
-    
+
     Args:
         cmd(str): El comando AT a enviar.
         delay(int): Opcional. Tiempo de espera en segundos después de
                     enviar el comando. Default delay=1 segundo.
-    Returns: 
+    Returns:
         bytes: La respuesta recibida del ESP8266, o None si no hay respuesta.
     """
 
@@ -24,7 +26,7 @@ def send_command(cmd, delay=1):
 
     # Leer respuesta del modulo wifi ESP8266
     response = uart.read()
-    
+
     if response:
         try:
             print(response.decode())
@@ -33,6 +35,7 @@ def send_command(cmd, delay=1):
     else:
         print("Sin respuesta")
     return response
+
 
 def wifi_connect(ssid, psswd):
     """
@@ -56,9 +59,11 @@ def wifi_connect(ssid, psswd):
     else:
         print("No se pudo obtener dirección IP.")
 
-if __name__ == "__main__":
-    ssid = "Fala lalala"
-    password = "sopadefrijoles13"
 
-    wifi_connect(ssid, password)
+if __name__ == "__main__":
+
+    MYSSID = "Fala lalala"
+    MYPASSWORD = "sopadefrijoles13"
+
+    wifi_connect(MYSSID, MYPASSWORD)
     print("Conexión wifi realizada.")
