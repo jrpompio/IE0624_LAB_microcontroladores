@@ -44,17 +44,17 @@ int main(void)
         
 		gfx_setTextColor(LCD_RED, LCD_BLACK);
         gfx_setCursor(15, 70);
-        sprintf(buffer_x, "x: %.2f", x_rate);
+        sprintf(buffer_x, "x:%.2f", x_rate);
         gfx_puts(buffer_x);
 		
         gfx_setTextColor(LCD_GREEN, LCD_BLACK);
         gfx_setCursor(15, 120);
-        sprintf(buffer_y, "y: %.2f", y_rate);
+        sprintf(buffer_y, "y:%.2f", y_rate);
         gfx_puts(buffer_y);
 
 		gfx_setTextColor(LCD_BLUE, LCD_BLACK);
         gfx_setCursor(15, 170);
-        sprintf(buffer_z, "z: %.2f", z_rate);
+        sprintf(buffer_z, "z:%.2f", z_rate);
         gfx_puts(buffer_z);
         
         printf("%.2f,%.2f,%.2f\n", x_rate, y_rate, z_rate);
