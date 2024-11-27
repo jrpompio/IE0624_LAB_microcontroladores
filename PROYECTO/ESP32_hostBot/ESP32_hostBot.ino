@@ -7,7 +7,7 @@ CTBot miBot;
 TBMessage msg;
 
 // Definir pines
-const int relePin = 2;  // Cambia este pin según sea necesario
+const int relePin = 4;  // Cambia este pin según sea necesario
 const int sensorPin = 34; // Pin analógico conectado al sensor
 
 // Umbral para activar el LED (1V en una escala de 0 a 3.3V)
