@@ -61,27 +61,46 @@ void manejarComando() {
     if (!cafeteraEncendida) {
       encenderCafetera();
       miBot.sendMessage(msg.sender.id, "Cafetera encendida. (por 30 minutos)");
-    } else {
+    } 
+    else {
       miBot.sendMessage(msg.sender.id, "La cafetera ya está encendida.");
     }
-  } else if (msg.text.equalsIgnoreCase("cafe off")) {
+  } 
+  else if (msg.text.equalsIgnoreCase("cafe off")) {
     if (cafeteraEncendida) {
       apagarCafetera();
       miBot.sendMessage(msg.sender.id, "Cafetera apagada.");
     } else {
       miBot.sendMessage(msg.sender.id, "La cafetera ya está apagada.");
     }
+  } 
+  else if (msg.text.equalsIgnoreCase("buenas noches")) {
+    //realizarSolicitudHTTP("http://192.168.0.10/goodn");
+    //realizarSolicitudHTTP("http://192.168.0.11/goodn");
+    realizarSolicitudHTTP("http://192.168.17.195/goodn");
+    miBot.sendMessage(msg.sender.id, "Buenas noches");
+  } else if (msg.text.equalsIgnoreCase("buenos dias")) {
+    //realizarSolicitudHTTP("http://192.168.0.10/goodm");
+    //realizarSolicitudHTTP("http://192.168.0.11/goodm");
+    realizarSolicitudHTTP("http://192.168.17.195/goodm");
+    miBot.sendMessage(msg.sender.id, "Buenos dias");
   } else if (msg.text.equalsIgnoreCase("luz on")) {
-    realizarSolicitudHTTP("http://192.168.0.17/luzon");
+    //realizarSolicitudHTTP("http://192.168.0.10/luzon");
+    //realizarSolicitudHTTP("http://192.168.0.11/luzon");
+    realizarSolicitudHTTP("http://192.168.17.195/luzon");
     miBot.sendMessage(msg.sender.id, "Se envió la solicitud para encender la luz.");
   } else if (msg.text.equalsIgnoreCase("luz off")) {
-    realizarSolicitudHTTP("http://192.168.0.17/luzoff");
+    //realizarSolicitudHTTP("http://192.168.0.10/luzoff");
+    //realizarSolicitudHTTP("http://192.168.0.11/luzoff");
+    realizarSolicitudHTTP("http://192.168.17.195/luzoff");
     miBot.sendMessage(msg.sender.id, "Se envió la solicitud para apagar la luz.");
   } else if (msg.text.equalsIgnoreCase("encender pc")) {
-    realizarSolicitudHTTP("http://192.168.0.17/wol");
+    //realizarSolicitudHTTP("http://192.168.0.10/wol");
+    //realizarSolicitudHTTP("http://192.168.0.11/wol");
+    realizarSolicitudHTTP("http://192.168.17.195/wol");
     miBot.sendMessage(msg.sender.id, "Se envió la solicitud para encender la computadora.");
   } else {
-    String reply = (String)"Hola " + msg.sender.username + ". Intenta escribir encender pc, cafe on, cafe off, luz on o luz off.";
+    String reply = (String)"Hola " + msg.sender.username + ". Intenta escribir encender pc, cafe on, cafe off, luz on o luz off, buenos dias o buenas noches.";
     miBot.sendMessage(msg.sender.id, reply);
   }
 }
