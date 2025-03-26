@@ -60,56 +60,51 @@
 }
 
 \begin{document}
+%-----------------------------------------------------------
+%-----------------------------------------------------------
+%-----------------------------------------------------------
+%-----------------------------------------------------------
+\newcommand{\diaEntrega}{25-03-2025}
+\newcommand{\profesor}{Marco Villalta}
+\newcommand{\tipoEntrega}{Laboratorio 01}
+\newcommand{\curso}{IE-0624 Laboratorio de Microcontroladores}
+\newcommand{\ciclo}{I-2025}
+%-----------------------------------------------------------
+%-----------------------------------------------------------
+%-----------------------------------------------------------
+%-----------------------------------------------------------
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|m{0.9\textwidth}|m{0.1\textwidth}|}
+        \hline
+        % Celda 1x
+        \centering
+        \vspace{0.2cm}
+        UNIVERSIDAD DE COSTA RICA \\ \vspace{0.2cm}
+         ESCUELA DE INGENIERÍA ELÉCTRICA \\ \vspace{0.2cm}
+         \curso %\\ \ciclo
+         \vspace{0.2cm}
+        &
+        % Celda 1x2
+        \includegraphics[width=\linewidth]{IMG/Imagen1.png}\\
+        \hline
+    \end{tabular}
 
-% %-----------------------------------------------------------
-% %-----------------------------------------------------------
-% %-----------------------------------------------------------
-% %-----------------------------------------------------------
-% \newcommand{\diaEntrega}{25-03-2025}
-% \newcommand{\profesor}{Marco Villalta}
-% \newcommand{\tipoEntrega}{Laboratorio 01}
-% \newcommand{\curso}{IE-0624 Laboratorio de Microcontroladores}
-% \newcommand{\ciclo}{I-2025}
-% %-----------------------------------------------------------
-% %-----------------------------------------------------------
-% %-----------------------------------------------------------
-% %-----------------------------------------------------------
-% \begin{table}[H]
-%     \centering
-%     \begin{tabular}{|m{0.9\textwidth}|m{0.1\textwidth}|}
-%         \hline
-%         % Celda 1x
-%         \centering
-%         \vspace{0.2cm}
-%         UNIVERSIDAD DE COSTA RICA \\ \vspace{0.2cm}
-%          ESCUELA DE INGENIERÍA ELÉCTRICA \\ \vspace{0.2cm}
-%          \curso %\\ \ciclo
-%          \vspace{0.2cm}
-%         &
-%         % Celda 1x2
-%         \includegraphics[width=\linewidth]{IMG/Imagen1.png}\\
-%         \hline
-%     \end{tabular}
-    
-%     \begin{tabular}{|m{0.4\textwidth}|m{0.6\textwidth}|}
-%         % Celda 2x1
-%         $\mu$lticolumn{1}{|p{0.4\textwidth}|}{
-%         \centering \footnotesize{PREPARADO POR: \\ \vspace{0.25cm}
-%         Ruiz Sánchez Junior Alfonso - B97026}
-%         }
-%         &
-%         % Celda 2x2
-%         $\mu$lticolumn{1}{p{0.6\textwidth}|}{
-%         \raggedright \footnotesize{ 
-%         \tipoEntrega \hfill Fecha de entrega: \diaEntrega  \\ \vspace{0.1cm}
-%         Profesor: \profesor
-        
-%         \hfill}
-%         } \\
-%         \hline
-%     \end{tabular}
-% \end{table}
+    \begin{tabular}{|m{0.4\textwidth}|m{0.6\textwidth}|}
+        \hline
+        % Celda 2x1
+        \centering \footnotesize{PREPARADO POR: \\ \vspace{0.25cm}
+        Ruiz Sánchez Junior Alfonso - B97026}
+        &
+        % Celda 2x2
+        \raggedright \footnotesize{
+        \tipoEntrega \hfill Fecha de entrega: \diaEntrega  \\ \vspace{0.1cm}
+        Profesor: \profesor
 
+        \hfill} \\
+        \hline
+    \end{tabular}
+\end{table}
 
 \tableofcontents
 \newpage
@@ -117,19 +112,172 @@
 \section{Introducción/Resumen}
 \subsection{Resumen}
 
+Este documento presenta el informe del Laboratorio 1, en
+el cual se diseñó e implementó un circuito utilizando un
+microcontrolador PIC12F683 y un registro de
+desplazamiento para controlar siete LEDs, con el objetivo
+de simular las caras de un dado electrónico.
+
+Link de github:\\
+\begin{minted}{python}
+https://github.com/jrpompio/IE0624_LAB_microcontroladores
+\end{minted}
+
 \subsection{Conclusiones importantes}
 
+\begin{itemize}
+    \item El PIC12F683 por sí solo no posee suficientes
+          pines GPIO para controlar los siete LEDs, lo que
+          hizo necesario el uso de un registro de
+          desplazamiento.
+    \item Se implementó un circuito RC para el pin de
+          entrada del pulsador con el fin de evitar el
+          rebote mecánico.
+    \item Se utilizaron resistencias de protección para
+          limitar la corriente en los LEDs y en el pin de
+          entrada del microcontrolador, asegurando la
+          integridad de los componentes.
+\end{itemize}
 
 \section{Nota Teórica}
+
 \subsection{Información general del microcontrolador}
 
+El PIC12F683 es un microcontrolador de 8 bits fabricado por
+Microchip Technology, reconocido por su eficiencia energética y
+su diseño compacto de 8 pines, ideal para aplicaciones con
+limitaciones de espacio y consumo de energía.
+
+También cabe destacar su bajo precio en el mercado
+en comparación con otros microcontroladores.
+
+Este microcontrolador opera en un amplio rango de tensión de
+alimentación, que va desde los 2.0V hasta los 5.5V, lo que
+le permite ser utilizado en diversas aplicaciones. Cuenta con
+una memoria Flash de aproximadamente 2 KB 
+para el almacenamiento del programa, 128 bytes
+de RAM 
+
+El PIC12F683 incorpora un oscilador interno que 
+puede funcionar a una frecuencia máxima de reloj de 20 MHz.
 
 \subsection{Periféricos}
 
+El PIC12F683 integra varios periféricos que amplían sus
+capacidades de control y procesamiento:
+
+\begin{itemize}
+    \item \textbf{Temporizadores}: Dispone de tres temporizadores
+    (Timer0, Timer1 y Timer2) que pueden utilizarse para
+    generar retardos precisos, contar eventos externos o
+    implementar funciones de temporización complejas mediante
+    interrupciones.
+    \item \textbf{Comparadores Analógicos}: Incorpora comparadores
+    analógicos que permiten comparar señales de voltaje, lo
+    cual es útil en aplicaciones de detección de umbrales o
+    control analógico básico.
+    \item \textbf{ADC}: Cuenta con un convertidor analógico a
+    digital (ADC) de 10 bits de resolución y 4 canales de
+    entrada, lo que facilita la conversión de señales
+    analógicas del mundo real a valores digitales para su
+    procesamiento por el microcontrolador.
+    \item \textbf{Watchdog Timer}: Un temporizador de vigilancia
+    que actúa como un mecanismo de seguridad, reiniciando el
+    microcontrolador en caso de que el software falle o se
+    quede bloqueado o enbuclado, asegurando así un funcionamiento más
+    fiable del sistema.
+
+\end{itemize}
 
 \subsection{Registros}
 
+La configuración y el control del PIC12F683 se realizan a
+través de una serie de registros especiales. Algunos de los
+registros clave incluyen:
+
+\begin{itemize}
+    \item \textbf{ANSEL}: Este registro se utiliza para
+    configurar la funcionalidad de los pines de entrada/salida
+    (GPIO) como entradas analógicas para el ADC o como
+    entradas/salidas digitales de propósito general. Al
+    establecerlo en \texttt{0x00}, se configuran todos los
+    pines como digitales.
+    \item \textbf{CMCON0}: El registro CMCON0 controla el
+    funcionamiento de los comparadores analógicos integrados.
+    Al configurarlo en \texttt{0x07}, se desactivan todos los
+    comparadores analógicos.
+    \item \textbf{TRISIO}: El registro TRISIO (Tri-State I/O)
+    determina la dirección de cada pin de entrada/salida. Un
+    '0' en un bit de este registro configura el pin
+    correspondiente como salida, mientras que un '1' lo
+    configura como entrada. Por ejemplo, configurarlo en
+    \texttt{0b00000100} establece el pin GP2 como entrada y
+    los demás pines (GP0, GP1, GP3, GP4, GP5) como salidas.
+    \item \textbf{GPIO}: El registro GPIO (General Purpose
+    Input/Output) se utiliza para leer el estado de los
+    pines configurados como entrada y para controlar el
+    estado lógico de los pines configurados como salida. Al
+    inicializarlo con \texttt{0b00000100}, se establece un
+    estado inicial en los pines de salida.
+    \item \textbf{\_\_config}: Este es el registro de
+    configuración (a menudo gestionado por el compilador)
+    que permite establecer opciones globales del
+    microcontrolador, como la protección de código para
+    evitar la lectura o modificación no autorizada del
+    programa, la configuración del tipo de oscilador a
+    utilizar y la habilitación o deshabilitación del
+    temporizador de vigilancia (Watchdog Timer).
+\end{itemize}
+
+
 \subsection{Diseño del circuito}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{IMG/Lab1.png}
+  \caption{Diagrama del circuito correspondiente a el laboratorio 1}
+  \label{fig:circuito}
+\end{figure}
+
+
+Se emplea un microcontrolador PIC12F683 como elemento
+central del circuito.
+
+La entrada del sistema se realiza a través del pin GP2 del
+microcontrolador, el cual se encuentra conectado a una red
+de *pull-down*. Esta red se compone de una resistencia de
+10 k$\Omega$, dispuesta entre la fuente de alimentación y el pin
+GP2, con el propósito de limitar la corriente.
+Adicionalmente, se incorpora un capacitor de 1 $\mu$F en
+paralelo con la resistencia para implementar un filtro de
+paso bajo y mitigar los efectos del rebote mecánico
+(bouncing) en el dispositivo de entrada. Esta configuración
+asegura que la señal digital en el pin GP2 presente niveles
+lógicos definidos (alto o bajo) en los momentos de
+muestreo.
+
+La comunicación con un registro de desplazamiento externo se
+establece mediante los pines de salida GP0 y GP1 del
+microcontrolador. El pin GP0 genera un tren de pulsos que
+actúa como señal de reloj para el registro de
+desplazamiento, indicando el instante en que un nuevo valor
+debe ser grabado. La grabación de datos en el registro se
+efectúa en el flanco de subida (posedge) de esta señal de
+reloj. Por su parte, el pin GP1 transmite la información o
+dato que se desea almacenar en el registro de
+desplazamiento.
+
+De esta manera, los pines GP0 y GP1 del microcontrolador
+permiten la interacción con un registro de desplazamiento
+que dispone de 8 pines para la recepción de datos.
+
+A cada uno de los primeros siete pines de salida del
+registro de desplazamiento se conecta un diodo emisor de
+luz (LED) de color verde. En serie con cada LED se incluye
+una resistencia de 200 $\Omega$ para limitar la corriente que
+circula a través del diodo y protegerlo de posibles daños.
+El octavo pin de salida del registro de desplazamiento no se
+utiliza para la presente configuración.
 
 
 \subsection{Lista de componentes y precios}
@@ -143,36 +291,245 @@
   \toprule
   \textbf{Componente} & \textbf{Descripción} & \textbf{Cantidad} & \textbf{Precio unitario (₡)} \\ 
   \midrule
-  PIC12F683 & Microcontrolador 8-bit & 1 & 1000 \\
-  BUSCAR & Registro de desplazamiento 8-bit & 1 & 1000\\
-  LED verde & Diodo emisor de luz 5mm & 7 & 1000  \\
-  Pulsador & Interruptor momentáneo & 1 & 1000 \\
-  Resistencia 100k$\Omega$ & Resistor pull-down & 1 & 1000  \\
-  Resistencia 10k$\Omega$ & Resistor limitador de corriente & 1 & 1000 \\
-  Capacitor 1$\mu$F & Filtro para debouncing & 1 & 1000 \\
+  PIC12F683 & Microcontrolador 8-bit & 1 & 1114 \\
+  CD4094BE & Registro de desplazamiento 8-bit & 1 & 825 \\
+  LED verde & Diodo emisor de luz 10mm & 7 & 275 \\
+  Pulsador & Interruptor momentáneo & 1 & 220 \\
+  Resistencia 100k$\Omega$ & Resistor pull-down & 1 & 66 \\
+  Resistencia 10k$\Omega$ & Resistor limitador de corriente & 1 & 66 \\
+  Resistencia 200$\Omega$ & Resistor para led & 7 & 66 \\
+  Capacitor 1$\mu$F & Filtro para debouncing & 1 & 138 \\
   \bottomrule
   \end{tabular}
   \end{table}
+  
+
+  \textbf{Costo total: 4816 colones} \\
 
   \textbf{Notas de diseño:}
   \begin{itemize}
-  \item El registro de desplazamiento (BUSCAR) se implementó 
+  \item El registro de desplazamiento (CD4094BE) se implementó 
         para ampliar las capacidades de salida del PIC12F683
-  \item El circuito RC (100k$\omega$ + 1$\mu$F) implementa un filtro pasa-bajos 
-        para eliminar rebotes \cite{debouncing}
-  \item La resistencia de 10k$\omega$ protege la entrada digital del microcontrolador
-
-  \item Los LEDs se disponen en patrón que simula las caras de un dado
+  \item El circuito RC (100k$\Omega$ + 1$\mu$F) implementa un filtro pasa-bajos 
+        para eliminar rebotes \cite{switchbounce}
+  \item La resistencia de 10k$\Omega$ protege la entrada digital del microcontrolador
+  
+  \item Los LEDs se disponen en patrón que simula las caras de un dado.
+        Estos estaran protegidos por un resistor de 200 $\Omega$ cada uno.
   \end{itemize}
 
 \subsection{Conceptos/temas del laboratorio}
+\textbf{GPIO:} Esto significa significa Entrada/Salida de Propósito General,
+se refiere a los pines de un microcontrolador que el programador puede configurar
+para interactuar con otros componentes electrónicos. Estos pines son fundamentales
+ya que permiten al microcontrolador tanto recibir información del mundo exterior, 
+actuando como entradas para leer el estado de sensores, botones o interruptores, 
+como controlar dispositivos externos, funcionando como salidas para encender LEDs, 
+activar relés o controlar motores. En esencia, los GPIO constituyen la interfaz principal 
+que habilita la comunicación y el control entre el microcontrolador y el entorno físico, 
+adaptándose a una gran diversidad de aplicaciones electrónicas.
 
 \section{Desarrollo/Análisis de Resultados}
 \subsection{Análisis del programa}
+\subsubsection{Configuración}
+
+
+\begin{minted}{c}
+int __at 0x2007 __config =
+    (_CP_OFF & _CPD_OFF      // Desactiva protecciones de codigo y de EEPROM
+     & _BOREN_OFF            // Desactiva reinicio por mala alimentación
+     & _MCLRE_OFF            // Desactiva el reset para usar GP3 como input
+     & _WDT_OFF              // Desactiva wathdog timer
+     & _INTRC_OSC_NOCLKOUT); // oscilador interno, sin salida de clock
+
+
+  //********************************************************************
+  //****************** EN EL MAIN **************************************
+  ANSEL = 0x00;         // Configurando pines como digitales
+  CMCON0 = 0x07;        // Desactivando comparadores
+  TRISIO = 0b00000100;  //  GP2 entrada, los demás son entradas
+  GPIO &= (0b00000100); // Inicializa todos los pines de salida en bajo
+
+\end{minted}
+
+La parte más importante de este programa es la configuración del PIC
+Para ello se usa primero el registro de configuración que almacena que perifericos,
+seguridad, circuitos internos o funciones están activadas.
+
+En este caso se puede notar que se tiene la función de reset desacivada,
+el wathdog timer desactivad, y el oscilador interno activado
+
+Posteriormente se realiza en el main las configuraciones relacionadas a los pines
+
+Ya que el proposito de este microcontrolador para este es caso es puramente digital,
+se configuran todos los pines como digitales, y se desactivan los comparadores
+
+Además como solo ocupamos un leer un pulsador, solo se usará el pin GP2 como entrada,
+las demás se configuran como salidas. Y se establecen todas las salidas en bajo.
+
+\subsubsection{funciones escenciales}
+
+\begin{minted}{c}
+
+void delay(unsigned int tiempo);
+/*  Esta función itera n*m veces donde n es el valor ingresado en la función
+ *   y m corresponde a un valor por tanteo
+ */
+void send_binary(unsigned int valor);
+/*
+ * Se envia numero en binario al registro desplazante
+ */
+void send_face(unsigned int valor);
+/*  Esta función se encarga de enviar a el registro
+ *  desplazante la cara del dado a mostrar. */
+\end{minted}
+
+Ahora se tienen 3 funciones importantes:
+
+\begin{itemize}
+  \item \textbf{delay:} Esta función ocupa el poder de procesamiento del controlador para que
+  no relice alguna otra función, esto lo hace mediante iteración de ciclos for de complejidad $O(n^{2})$
+  la cual fue ajustada mediante tanteo para que se ajustara con lo deseado en la simulación.
+  \item \textbf{send\_binary:} Envia 1 byte de datos en forma numerica mediante los pines GP0 y GP1 a el registro desplazante.
+  Es importante recalcar que como envia el bit menos significativo primero, el pin del registro desplazante
+  de la simulación Q7 contendrá el valor menos significativo del número en binario. 
+  \item \textbf{send\_face:} Mediante un switch cambia el dato introducido de decimal que representa el valor numerico
+  de la cara del dado a decimal que representa la cara del dado en la configuración de leds dada.
+  Esto para poder representar el dado como si fuese un dado real, después de transformar esta equivalencia
+  usa la función send\_binary
+\end{itemize}
+
+\begin{table}[H]
+  \centering
+  \caption{Datos de conversión de la función send\_face}
+  \label{tab:conversion_dado}
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+    \textbf{Cara del Dado} & \textbf{LEDs Encendidos} & \textbf{Representación Binaria} & \textbf{Valor Decimal} \\
+    \hline
+    1 & [7] & 0100\_0000 & 64 \\
+    \hline
+    2 & [1, 4] & 0000\_1001 & 9 \\
+    \hline
+    3 & [1, 4, 7] & 0100\_1001 & 73 \\
+    \hline
+    4 & [1, 3, 4, 6] & 0010\_1101 & 45 \\
+    \hline
+    5 & [1, 3, 4, 6, 7] & 0110\_1101 & 109 \\
+    \hline
+    6 & [1, 2, 3, 4, 5, 6] & 0011\_1111 & 63 \\
+    \hline
+    Default & Todos los LEDs apagados & 0000\_0000 & 0 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\subsubsection{Codigo principal}
+
+\begin{minted}{c}
+    case 1:
+      if (face % 50 == 0) {
+        send_binary(animation);
+        if (animation > 64)
+          animation = 1;
+        animation = animation * 2;
+      }
+      if (init_state1) {
+        delay(500);
+        init_state1 = 0;
+      }
+      if (face > 600)
+        face = 1;
+      if (GP2 == 1)
+        state = 2;
+      delay(2);
+      face++;
+      break;
+    case 2:
+      delay(500);
+      send_face(face % 6 + 1);
+      state = 3;
+      init_state1 = 1;
+      break;
+    case 3:
+      if (GP2 == 1)
+        state = 1;
+      break;
+\end{minted}
+
+Finalmente se tiene el main que funciona con un switch que representa estimados
+En el primer estado, estado 1, se hace la iteración de las caras del dado en la variable face
+e iteración de animación para el dado con la variable animation que siempre será 
+potencia de 2, para iterar cada led, hasta que se presione el pulsador.
+
+Estado 2, na vez se presionó el pulsador se obtiene el mod 6 de face y se suma uno
+Para representar la cara del dado, y se procede a ir al estado 3.
+
+En el estado 3 solo se espera que se presione el pulsador para regresar a el estado 1.
+
+
+Se puede notar que en el estado 1 hay un delay que solo se ejecuta si se inicia o si se
+probiene de una alternación de estados 1-2-3-1. El estado 2 también presenta un delay.
+
+Para proteger que no se transite a el estado 1 desde el estado 3 de golpe.
+
+
+La animación permite diferenciar el estado 1 de un metaestado que solo muestre muchas 
+caras del dado debido a un error humano en el código. Esta animación itera más lento
+ya que itera mediante cada 50 valores de la variable face.
 
 \subsection{Análisis electrónico}
 
+  Teniendo como componente central el microcontrolador PIC12F683 se puede observar que no
+  es posible controlar 7 leds, debido a que solo se cuenta con 6 pines GPIO y el pin GP3
+  solo se puede usar como reset o como input, por lo que nos deja con 5 pines de output.
+  
+  Por lo que el segundo componente más importante es el registro de desplazamiento que
+  almanena 8 bits de memoria. Este permite controlar los 7 leds de forma aislada a el 
+  microcontrolador, así evitando tener que usar otros circuitos para controlar la alimentación
+  de cada led y no sobrecargar el microcontrolador. Por lo que es escencial.
+
+  Finalmente se usaron resistores de protección tanto para el pin GP2 como para cada led.
+
+\subsection{Funcionamiento}
+
+Para usar este circuito solo se debe alimentar; una vez realizado esto el circuito entrará
+en el estado 1, por lo que se animará una secuencia de leds hasta detenerse mediante el pulsador
+y procederá a mostrar la cara del dado obtenida, Finalmente se vuelve a presionar el pulsador
+para volver a mostrar la secuencia de los led que representa que está en el estado 1.
+
+
+
 \section{Conclusiones y Recomendaciones}
+
+\subsection{Conclusiones}
+
+En este laboratorio, se logró construir un dado electrónico
+funcional usando un microcontrolador PIC12F683 y un chip
+extra (registro de desplazamiento) para poder encender
+todos los LEDs que necesitamos. 
+
+Como el microcontrolador no
+tenía suficientes pines GPIO, el registro de
+desplazamiento fue clave.
+También se aseguró de que el botón funcionara sin "brincos" gracias a un
+circuito de pull down con filtro pasa bajos.
+
+Finalmente, usamos unas resistencias para
+que los componentes no se quemaran. 
+
+Al principio, los
+LEDs prenden de forma animada para que sepamos que el
+sistema está listo y diferenciar de errores en el sistema.
+
+\subsection{Recomendaciones}
+
+Para mejorar este proyecto, se podrían probar diferentes
+formas en que los LEDs prenden al inicio, para que sea más
+llamativo.
+
+Si se quisiese que el número del dado fuera más aleatorio,
+podríamos buscar otras formas de generarlo.
 
 \section{Bibliografía}
 \bibliographystyle{unsrt}
@@ -180,6 +537,9 @@
 
 \section{Apéndices}
 \subsection{Hojas de datos de componentes utilizados}
+\includepdf[pages=-]{pdf/PIC.pdf}
+\includepdf[pages=-]{pdf/shiftreg.pdf}
+\includepdf[pages=-]{pdf/led.pdf}
 
 
 

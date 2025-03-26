@@ -3,6 +3,8 @@
  *__________________IE0624_Laboratorio_de_microcontroladores___________________
  *__________________________Junior_Ruiz_Sánchez________________________________
  * Laboratorio 1:
+ *  En este laboratorio se realizará un dado electronico que simula uno real,
+ *  Se usará el microcontrolador PIC 12F683 para este proposito.
  *****************************************************************************/
 #include <pic14/pic12f683.h>
 

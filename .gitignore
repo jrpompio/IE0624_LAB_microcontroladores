@@ -43,3 +43,5 @@
 maqueta.c
 prueba.simu
 PROYECTO/raspberry_pico/config.py
+build/
+pdf/
