@@ -74,36 +74,39 @@
 %-----------------------------------------------------------
 %-----------------------------------------------------------
 \begin{table}[H]
-    \centering
-    \begin{tabular}{|m{0.9\textwidth}|m{0.1\textwidth}|}
-        \hline
-        % Celda 1x
-        \centering
-        \vspace{0.2cm}
-        UNIVERSIDAD DE COSTA RICA \\ \vspace{0.2cm}
-         ESCUELA DE INGENIERÍA ELÉCTRICA \\ \vspace{0.2cm}
-         \curso %\\ \ciclo
-         \vspace{0.2cm}
-        &
-        % Celda 1x2
-        \includegraphics[width=\linewidth]{IMG/Imagen1.png}\\
-        \hline
-    \end{tabular}
-
-    \begin{tabular}{|m{0.4\textwidth}|m{0.6\textwidth}|}
-        \hline
-        % Celda 2x1
-        \centering \footnotesize{PREPARADO POR: \\ \vspace{0.25cm}
-        Ruiz Sánchez Junior Alfonso - B97026}
-        &
-        % Celda 2x2
-        \raggedright \footnotesize{
-        \tipoEntrega \hfill Fecha de entrega: \diaEntrega  \\ \vspace{0.1cm}
-        Profesor: \profesor
-
-        \hfill} \\
-        \hline
-    \end{tabular}
+  \centering
+  \begin{tabular}{|m{0.9\textwidth}|m{0.1\textwidth}|}
+      \hline
+      % Celda 1x
+      \centering
+      \vspace{0.2cm}
+      UNIVERSIDAD DE COSTA RICA \\ \vspace{0.2cm}
+       ESCUELA DE INGENIERÍA ELÉCTRICA \\ \vspace{0.2cm}
+       \curso \\ \ciclo
+       \vspace{0.2cm}
+      &
+      % Celda 1x2
+      \includegraphics[width=\linewidth]{IMG/Imagen1.png}\\
+      \hline
+  \end{tabular}
+  
+  \begin{tabular}{|m{0.4\textwidth}|m{0.6\textwidth}|}
+      % Celda 2x1
+      \multicolumn{1}{|p{0.4\textwidth}|}{
+      \centering \footnotesize{PREPARADO POR: \\ \vspace{0.25cm}
+      Ruiz Sánchez Junior Alfonso - B97026}
+      }
+      &
+      % Celda 2x2
+      \multicolumn{1}{p{0.6\textwidth}|}{
+      \raggedright \footnotesize{ 
+      \tipoEntrega \hfill Fecha de entrega: \diaEntrega \\ \vspace{0.1cm}
+      Profesor: \profesor
+      
+      \hfill}
+      } \\
+      \hline
+  \end{tabular}
 \end{table}
 
 \tableofcontents
@@ -537,9 +540,9 @@ podríamos buscar otras formas de generarlo.
 
 \section{Apéndices}
 \subsection{Hojas de datos de componentes utilizados}
-\includepdf[pages=-]{pdf/PIC.pdf}
-\includepdf[pages=-]{pdf/shiftreg.pdf}
-\includepdf[pages=-]{pdf/led.pdf}
+% \includepdf[pages=-]{pdf/PIC.pdf}
+% \includepdf[pages=-]{pdf/shiftreg.pdf}
+% \includepdf[pages=-]{pdf/led.pdf}
 
 
 

@@ -8,7 +8,7 @@ all: run
 
 $(PDF): $(SOURCES)
 	$(LATEX) $(SOURCES)
-	$(LATEX) $(SOURCES)
+	#$(LATEX) $(SOURCES)
 	mv build/$(TARGET).pdf $(TARGET).pdf
 
 
